@@ -1,0 +1,10 @@
+venv/
+venv4/
+__pycache__/
+.idea/*
+venv2/
+AI/input_images
+AI/input_stremoved
+Py/decensor_input
+Py/decensor_input_original
+Py/decensor_output

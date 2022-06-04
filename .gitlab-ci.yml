@@ -1,0 +1,67 @@
+stages:
+  - AI
+  - Py
+
+variables:
+  LINKORID: "https://nhentai.net/g/238404/"
+  BARORMOSAIC: "bar"
+  STREMOVE: "true"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONUNBUFFERED: "1"
+
+image: "python:3.7"
+
+
+.AI:
+  variables:
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB: "true"
+  stage: AI
+  image: python:3.5
+  script:
+    - python --version  # Print out python version for debugging
+    - pip install --upgrade pip
+#    - pip install virtualenv
+#    - virtualenv venv
+#    - source venv/bin/activate
+    - apt-get update && apt-get install -y libgl1
+    - pip install -r AI/requirements-cpu.txt
+    - python AI/main.py $LINKORID $BARORMOSAIC $STREMOVE
+
+
+AI-bar:
+  extends: .AI
+  rules:
+    - if: $BARORMOSAIC == 'bar'
+      when: always
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - Py/decensor_input/*.png
+
+# mosaic needs colored in + original
+AI-mosaic:
+  extends: .AI
+  rules:
+    - if: $BARORMOSAIC == 'mosaic'
+      when: always
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - Py/decensor_input/*.png
+      - Py/decensor_input_original/*.png
+
+Py:
+  stage: Py
+  image: python:3.6
+  script:
+    - python --version  # Print out python version for debugging
+    - pip install --upgrade pip
+#    - pip install virtualenv
+#    - virtualenv venv2
+#    - source venv2/bin/activate
+    - pip install -r Py/requirements-cpu.txt
+    - python Py/decensor.py
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - Py/decensor_output/*.png
