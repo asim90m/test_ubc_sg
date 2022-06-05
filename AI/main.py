@@ -102,9 +102,11 @@ if __name__ == "__main__":
     stremove_folder = os.path.join(os.getcwd(), "AI", "input_stremoved", "")
     if not os.path.exists(input_images_folder):
         os.makedirs(input_images_folder)
-    dec_input = os.path.join(os.getcwd(), "Py", "decensor_input", "")
-    dec_output = os.path.join(os.getcwd(), "Py", "decensor_output", "")
+    dec_input = os.path.join(PY_folder, "decensor_input", "")
+    dec_input_original = os.path.join(PY_folder, "decensor_input_original", "")
+    dec_output = os.path.join(PY_folder, "decensor_output", "")
     wipedir(dec_input)
+    wipedir(dec_input_original)
     wipedir(dec_output)
 
     detect_instance = Detector(weights_path=weights_path)
