@@ -3,7 +3,7 @@
 Automated pipeline to decensor doujins with bars or mosaics using modified versions of natethegreate's HentAI and deeppomf's DeepCreamPy.
 Provide a link or 6-digit id to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
 
-The output is usually imperfect (either missing some parts, or green leftover), but usually much better than no processing, especially considering it's all automated.
+The output is usually imperfect (missed spots, slight green spots), but usually much better than no processing, especially considering it's all automated.
 
 
 <details markdown="1">
@@ -25,7 +25,7 @@ I don't intend for other people to run pipelines on my repo. You should fork thi
 and then run pipelines on your own shared or specific runners. I've personally set up my own runner on my computer with docker, which was a hassle but ultimately means
 I'm not limited by GitLab's restricted run minutes. The process to make your own runner is in the documentation: https://docs.gitlab.com/runner/.
 
-With that said, here is how you run a pipeline, once you have your own repo/optional runner:
+With that said, here is how you run a pipeline, once you have your own repo fork:
 
 1. On the GitLab repo sidebar, click CI/CD->Pipelines
 2. Click "Run pipeline" in the top right. You'll see a screen that allows you to enter variables to form the pipeline's functionality.

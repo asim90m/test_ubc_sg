@@ -35,6 +35,10 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
     output_dir = os.path.join(dcp_dir, "decensor_input", "")
     assert os.path.exists(output_dir)
 
+    print('Running detection, outputting to {}'.format(output_dir))
+    detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=False,
+                                  is_mosaic=is_mosaic, dilation=dilation)
+
     # Announce completion, TODO: offer to run DCP from DCP directory
     detect_instance.unload_model()
     print('Process complete!')
@@ -109,7 +113,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('link')
     parser.add_argument('barormosaic')  # bar or mosaic censorship
-    parser.add_argument('stremove')  #remove screen tones or don't
+    parser.add_argument('stremove')  # remove screen tones or don't
     args = parser.parse_args()
 
     link, barormosaic, stremove = args.link, args.barormosaic, args.stremove
