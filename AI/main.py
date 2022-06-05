@@ -25,7 +25,7 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
                 'JPG') or fil.endswith('PNG') or fil.endswith('JPEG'):
             try:
                 path1 = os.path.join(in_path, fil)
-                path2 = os.path.join(dcp_dir, "decensor_input_original")
+                path2 = os.path.join(dcp_dir, "decensor_input_original", fil)
                 shutil.copy(path1, path2)  # DCP is compatible with original jpg input.
             except Exception as e:
                 print("ERROR in hentAI_detection: Mosaic copy to decensor_input_original failed!", fil, e)

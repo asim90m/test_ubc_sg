@@ -62,3 +62,22 @@ You could copy this repo and change pretty much nothing, and it would work on an
 The free tier of Gitlab CI only allows 400 pipeline minutes per month. 
 The decensorring is not perfect, it'll sometimes miss bars and mosaic decensorring is not always good. However, running a censored
 comic through this pipeline improves it significantly.
+
+
+# Development
+Although I am happy with the work done here, I can't promise to maintain it. If you have a feature you want to add, please leave a pull request.
+Here are some notes to help with development:
+
+To see what gets run in what order, check out .gitlab-ci.yml. 
+
+Essentially, `AI/main.py` is run on Python 3.5, which downloads from nhentai.xxx, processes all the images, and then `Py/decensor.py` is run on Python 3.6. 
+The difference in Python versions is due to the needs of machine learning libraries.
+
+Images are downloaded from nhentai.xxx because nhentai.net has CloudFlare protection, and despite my best efforts, I couldn't get [this cli tool](https://pypi.org/project/nhentai/) to accept my cookies/user-agent to bypass CloudFlare.
+Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could catch on and rate limit us, so if anyone knows better API practice, you can modify AI/ndownloader.py, which I wrote.
+
+A major feature that would speed up the time each pipeline takes is pip package caching by GitLab CI. I tried to get it to work for a while,
+but the different Python versions seemed to make it impossible to store two different pip caches and restore them at the right times. 
+
+One feature that would solve the above is if both AI and Py could be run on the same Python version. I haven't experimented too much with this, but I know
+ML packages tend to be picky so I'm hesitant to try.
