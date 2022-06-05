@@ -25,7 +25,7 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
                 'JPG') or fil.endswith('PNG') or fil.endswith('JPEG'):
             try:
                 path1 = os.path.join(in_path, fil)
-                path2 = os.path.join(dcp_dir, "decensor_input_original", fil)
+                path2 = os.path.join(dcp_dir, "decensor_input_original")
                 shutil.copy(path1, path2)  # DCP is compatible with original jpg input.
             except Exception as e:
                 print("ERROR in hentAI_detection: Mosaic copy to decensor_input_original failed!", fil, e)
@@ -34,15 +34,6 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
     # Run detection
     output_dir = os.path.join(dcp_dir, "decensor_input", "")
     assert os.path.exists(output_dir)
-    if (is_video == True):
-        print('Running video detection')
-        detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=True,
-                                      orig_video_folder=os.path.join(dcp_dir, "decensor_input_original"),
-                                      dilation=dilation)  #no jpg for video detect
-    else:
-        print('Running detection, outputting to {}'.format(output_dir))
-        detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=False,
-                                      is_mosaic=is_mosaic, dilation=dilation)
 
     # Announce completion, TODO: offer to run DCP from DCP directory
     detect_instance.unload_model()
@@ -94,7 +85,7 @@ if __name__ == "__main__":
     2. If screentone removal is specified, remove screentones
     3. Convert jpgs to pngs
     4. Run AI
-    5. Run Deblur (other script, Python 3.6 instead of 3.5)
+    5. Run decensor (other script, Python 3.6 instead of 3.5)
     
     """
 
