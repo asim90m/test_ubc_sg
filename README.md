@@ -1,4 +1,6 @@
 # DoujinCI
+Note: in the current state, this doesn't work with shared runners because DCP runs out of RAM. So, the only way to 
+use this magic is to set up Docker and gitlab-runner which is not easy, especially since Docker Desktop hates Windows in my experience.
 
 Automated pipeline to decensor doujins with bars or mosaics using modified versions of natethegreate's HentAI and deeppomf's DeepCreamPy.
 Provide a link or 6-digit id to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
@@ -20,6 +22,8 @@ Mosaics:
 </details>
 
 # Instructions
+Imgur with less verbose instructions: [https://imgur.com/a/D1EQYkE](https://imgur.com/a/D1EQYkE). Read below for more details.
+
 GitLab pipelines can either run on shared job runners, owned by GitLab, or runners that you make for yourself "specific runners".
 I don't intend for other people to run pipelines on my repo. You should fork this repo (or copy the sourcecode and upload it to GitLab), 
 and then run pipelines on your own shared or specific runners. I've personally set up my own runner on my computer with docker, which was a hassle but ultimately means
@@ -39,6 +43,22 @@ doesn't have screentones, you can set `STREMOVE` to `false`. If you set it to fa
 click Download on the Job artifacts. This will be a zip with the decensorred images. 
 8. Any errors will be printed out in the AI or Py jobs. You can use these error messages to figure out what's wrong.
 
+# Manual Instructions (Downloading and running on your computer)
+If you're not familiar with programming, going through the process of doing everything manually might be challenging, but also 
+didactic. Googling error messages will be your best bet.
+
+1. Clone this repository, or download it. 
+2. Install Python 3.5 and Python 3.6
+
+The rest of the following steps happen in a terminal.
+3. Create two virtual environments in the repository directory, one using Python 3.5 and the other using Python 3.6
+
+Note: We'll be installing the `cpu` based dependencies, I have not tested the gpu dependencies (I don't understand what CUDA is and at this point I'm afraid to ask)
+Another note: if you're on Windows, you'll probably have to use backslashes (\) instead of slashes (/) in all the following paths. 
+4. Activate the Python 3.5 one and run `pip install -r AI/requirements-cpu.txt`. If there are errors, google them, and also make sure `python --version` says Python 3.5.
+5. With 3.5 venv still activated, run `python AI/main.py $LINKORID $BARORMOSAIC $STREMOVE` with your arguments provided, e.g. `python AI/main.py 123456 bar true`. Wait for this to complete.
+6. Activate the Python 3.6 venv and run `pip install -r Py/requirements-cpu.txt`. Same troubleshooting advice as step 4.
+7. With 3.6 venv still activated, run `python Py/decensor.py`. After a while, the images should be in Py/decensor_output.
 
 # Backstory
 In the space of automated comic decensoring, two tools, [HentAI](https://github.com/natethegreate/hent-AI) (AI) and [DeepCreamPy](https://portrait.gitee.com/1436159772/DeepCreamPy/tree/master) (DCP) have existed for a while. The former 
@@ -71,13 +91,11 @@ Here are some notes to help with development:
 To see what gets run in what order, check out .gitlab-ci.yml. 
 
 Essentially, `AI/main.py` is run on Python 3.5, which downloads from nhentai.xxx, processes all the images, and then `Py/decensor.py` is run on Python 3.6. 
-The difference in Python versions is due to the needs of machine learning libraries.
+The difference in Python versions is due to the needs of machine learning libraries that the original creators compiled their models with.
 
 Images are downloaded from nhentai.xxx because nhentai.net has CloudFlare protection, and despite my best efforts, I couldn't get [this cli tool](https://pypi.org/project/nhentai/) to accept my cookies/user-agent to bypass CloudFlare.
 Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could catch on and rate limit us, so if anyone knows better API practice, you can modify AI/ndownloader.py, which I wrote.
 
-A major feature that would speed up the time each pipeline takes is pip package caching by GitLab CI. I tried to get it to work for a while,
-but the different Python versions seemed to make it impossible to store two different pip caches and restore them at the right times. 
 
-One feature that would solve the above is if both AI and Py could be run on the same Python version. I haven't experimented too much with this, but I know
-ML packages tend to be picky so I'm hesitant to try.
+One feature that would be helpful is if both AI and Py could be run on the same Python version. This would simplify the pipeline configuration,
+and would also make straight up running the code easier. 
