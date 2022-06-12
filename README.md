@@ -96,9 +96,12 @@ The difference in Python versions is due to the needs of machine learning librar
 Images are downloaded from nhentai.xxx because nhentai.net has CloudFlare protection, and despite my best efforts, I couldn't get [this cli tool](https://pypi.org/project/nhentai/) to accept my cookies/user-agent to bypass CloudFlare.
 Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could catch on and rate limit us, so if anyone knows better API practice, you can modify AI/ndownloader.py, which I wrote.
 
-
-One feature that would be helpful is if both AI and Py could be run on the same Python version. This would simplify the pipeline configuration,
+### Future features that I won't work on but you could:
+- Making both both AI and Py run on the same Python version. This would simplify the pipeline configuration,
 and would also make straight up running the code easier. It's unlikely to be possible because of the machine learning versions though.
+- Downloading and uploading from Imgur as an option.
+- Trying [DeepMosaics](https://github.com/HypoX64/DeepMosaics) instead of DeepCreamyPy
+- Getting the pictures to be in the top level of the artifacts instead of 2 folders in (Py/decensor_output/*.png currently).
 
 # Troubleshooting
 If you see an error message like "bin/bash killed ###", the runner probably ran out of RAM. If it's a shared runner, not much can be done about that.
