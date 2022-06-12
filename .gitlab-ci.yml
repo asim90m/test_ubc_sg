@@ -42,11 +42,13 @@ AI:
       - Py/decensor_input_original/*.png
 
 Py:
+  tags:
+    - gitlab-org # for more ram, otherwise crashes
   stage: Py
   image: python:3.6
   extends: ".cache_python"
   script:
-    - python --version  # Print out python version for debugging
+    - python --version
     - pip install --upgrade pip
     - pip install virtualenv
     - virtualenv venv
