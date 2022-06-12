@@ -30,7 +30,7 @@ pipelines on your fork, using your own shared runner minutes. Another option is 
 
 With that out of the way:
 
-1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. 
+1. Make a GitLab account and [fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. 
 2. On the GitLab repo sidebar of your fork, click CI/CD->Pipelines. 
 3. Click "Run pipeline" in the top right. You'll then see a screen that allows you to enter variables to mold the pipeline's functionality in a key:value fashion.
 4. Put `LINKORID` as a key (left text field) and the link or id of the comic as the value (right text field). You can check the Imgur album if you're unsure.
