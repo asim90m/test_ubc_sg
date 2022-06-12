@@ -4,6 +4,7 @@ import shutil
 from detector import Detector
 import argparse
 import ndownloader
+import imgurdownloader
 import re
 from PIL import Image
 
@@ -121,14 +122,23 @@ if __name__ == "__main__":
     link, barormosaic, stremove = args.link, args.barormosaic, args.stremove
     if barormosaic.lower() not in ["bar", "mosaic"]:
         raise Exception("Specify BARORMOSAIC as bar or mosaic in the pipeline variables please")
-    id = re.search('[0-9]+', link).group(0)
-    if len(id) != 6:
-        raise Exception("Invalid ID")
-    print("Running with args barormosaic:" + barormosaic + " id:" + id + " screentoneremove:" + stremove)
+    imgur = False
+    if "imgur" in link.lower():
+        assert "/a/" in link.lower(), "Error: not an album link ('/a/' missing)"
+        print("Running with args barormosaic:" + barormosaic + " imgur link:" + link + " screentoneremove:" + stremove)
+        imgur = True
+    else:
+        id = re.search('[0-9]+', link).group(0)
+        if len(id) != 6:
+            raise Exception("Invalid nhentai link/ID")
+        print("Running with args barormosaic:" + barormosaic + " id:" + id + " screentoneremove:" + stremove)
 
     print("Step 1: Downloading images")
     wipedir(input_images_folder)
-    ndownloader.download(input_images_folder, id)
+    if imgur:
+        imgurdownloader.download(input_images_folder, link)
+    else:
+        ndownloader.download(input_images_folder, id)
 
     if stremove.lower() == "true":
         print("Step 2: Removing screentones")
@@ -159,3 +169,10 @@ if __name__ == "__main__":
         mosaic_detect(PY_folder, input_images_folder)
 
     print("Finished Part 1!")
+
+# venv 2 is py 3.6
+# venv 4 is py 3.5
+# .\venv4\Scripts\activate
+# .\venv4\Scripts\python.exe .\AI\main.py
+# .\venv2\Scripts\activate
+# .\venv2\Scripts\python.exe .\Py\decensor.py

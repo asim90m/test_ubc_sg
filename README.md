@@ -1,6 +1,6 @@
 # DoujinCI
 
-DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a link or 6-digit id to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
+DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a nhentai link, nhentai 6-digit id, or Imgur album link to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
 
 DoujinCI builds off of natethegreate's [HentAI](https://github.com/natethegreate/hent-AI) and deeppomf's [DeepCreamPy](https://portrait.gitee.com/1436159772/DeepCreamPy/tree/master), but adds in the convenience of
 downloading the doujin automatically, converting the .jpgs to .pngs, removing screentones, and downloading all the right dependencies for HentAI and DeepCreamPy,
@@ -33,7 +33,7 @@ With that out of the way:
 1. Make a GitLab account and [fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. 
 2. On the GitLab repo sidebar of your fork, click CI/CD->Pipelines. 
 3. Click "Run pipeline" in the top right. You'll then see a screen that allows you to enter variables to mold the pipeline's functionality in a key:value fashion.
-4. Put `LINKORID` as a key (left text field) and the link or id of the comic as the value (right text field). You can check the Imgur album if you're unsure.
+4. Put `LINKORID` as a key (left text field) and the nhentai link, imgur link, or nhentai id of the comic as the value (right text field). You can check the Imgur album above if you're unsure.
 5. The pipeline defaults to bar censorship, if yours has mosaics, put `BARORMOSAIC` as a key and `mosaic` as the value.
 6. The pipeline defaults to averaging out pictures to remove [screentones](https://en.wikipedia.org/wiki/Screentone). If you are sure that your comic
 doesn't have screentones, you can set `STREMOVE` to `false`. If you set it to false and screentones are actually in your comic, then the output will be bad and time will be wasted.
@@ -99,9 +99,9 @@ Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could c
 ### Future features that I won't work on but you could:
 - Making both both AI and Py run on the same Python version. This would simplify the pipeline configuration,
 and would also make straight up running the code easier. It's unlikely to be possible because of the machine learning versions though.
-- Downloading and uploading from Imgur as an option.
+- Uploading to Imgur for the output
 - Trying [DeepMosaics](https://github.com/HypoX64/DeepMosaics) instead of DeepCreamyPy
 - Getting the pictures to be in the top level of the artifacts instead of 2 folders in (Py/decensor_output/*.png currently).
-
+- Migrating to Github for Github actions
 # Troubleshooting
 If you see an error message like "bin/bash killed ###", the runner probably ran out of RAM. If it's a shared runner, not much can be done about that.
