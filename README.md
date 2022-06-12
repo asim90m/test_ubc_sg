@@ -1,9 +1,10 @@
 # DoujinCI
-Note: in the current state, this doesn't work with shared runners because DCP runs out of RAM. So, the only way to 
-use this magic is to set up Docker and gitlab-runner which is not easy, especially since Docker Desktop hates Windows in my experience.
 
-Automated pipeline to decensor doujins with bars or mosaics using modified versions of natethegreate's HentAI and deeppomf's DeepCreamPy.
-Provide a link or 6-digit id to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
+DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a link or 6-digit id to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
+
+DoujinCI builds off of natethegreate's [HentAI](https://github.com/natethegreate/hent-AI) and deeppomf's [DeepCreamPy](https://portrait.gitee.com/1436159772/DeepCreamPy/tree/master), but adds in the convenience of
+downloading the doujin automatically, converting the .jpgs to .pngs, removing screentones, and downloading all the right dependencies for HentAI and DeepCreamPy,
+which would normally be a huge hassle.
 
 The output is usually imperfect (missed spots, slight green spots), but usually much better than no processing, especially considering it's all automated.
 
@@ -22,28 +23,27 @@ Mosaics:
 </details>
 
 # Instructions
-Imgur with less verbose instructions: [https://imgur.com/a/D1EQYkE](https://imgur.com/a/D1EQYkE). Read below for more details.
+[Imgur album](https://imgur.com/a/D1EQYkE), probably the easiest way to learn how to use the pipeline: [https://imgur.com/a/D1EQYkE](https://imgur.com/a/D1EQYkE). Read below for more details.
 
-GitLab pipelines can either run on shared job runners, owned by GitLab, or runners that you make for yourself "specific runners".
-I don't intend for other people to run pipelines on my repo. You should fork this repo (or copy the sourcecode and upload it to GitLab), 
-and then run pipelines on your own shared or specific runners. I've personally set up my own runner on my computer with docker, which was a hassle but ultimately means
-I'm not limited by GitLab's restricted run minutes. The process to make your own runner is in the documentation: https://docs.gitlab.com/runner/.
+Pipeline jobs are run on "runners", essentially cloud-hosted computers. Every person is entitled to 400 minutes of runner usage per month on GitLab's "shared runners". As such, you should fork (copy) this repo and run your own
+pipelines on your fork, using your own shared runner minutes. Another option is to [host your own runner](https://docs.gitlab.com/runner/), which involves complicated Docker setup, but allows you to run as many pipelines as you want.
 
-With that said, here is how you run a pipeline, once you have your own repo fork:
+With that out of the way:
 
-1. On the GitLab repo sidebar, click CI/CD->Pipelines
-2. Click "Run pipeline" in the top right. You'll see a screen that allows you to enter variables to form the pipeline's functionality.
-In the variables, you can add key:value pairs. You put the key in the left field and the value in the right field.
-3. Put `LINKORID` as a key and the link or id of the comic as the value
-4. The pipeline defaults to bar censorship, if yours has mosaics, put `BARORMOSAIC` as a key and `mosaic` as the value.
-5. The pipeline defaults to averaging out pictures to remove [screentones](https://en.wikipedia.org/wiki/Screentone). If you are sure that your comic
-doesn't have screentones, you can set `STREMOVE` to `false`. If you set it to false and screentones are in your comic, then the output will be bad and time will be wasted.
-6. Click "Run pipeline"
-7. Wait for the AI and Py jobs to finish. When they're done (and successful), click through to the Py job, and on the right middle of the screen
-click Download on the Job artifacts. This will be a zip with the decensorred images. 
-8. Any errors will be printed out in the AI or Py jobs. You can use these error messages to figure out what's wrong.
+1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. 
+2. On the GitLab repo sidebar of your fork, click CI/CD->Pipelines. 
+3. Click "Run pipeline" in the top right. You'll then see a screen that allows you to enter variables to mold the pipeline's functionality in a key:value fashion.
+4. Put `LINKORID` as a key (left text field) and the link or id of the comic as the value (right text field). You can check the Imgur album if you're unsure.
+5. The pipeline defaults to bar censorship, if yours has mosaics, put `BARORMOSAIC` as a key and `mosaic` as the value.
+6. The pipeline defaults to averaging out pictures to remove [screentones](https://en.wikipedia.org/wiki/Screentone). If you are sure that your comic
+doesn't have screentones, you can set `STREMOVE` to `false`. If you set it to false and screentones are actually in your comic, then the output will be bad and time will be wasted.
+7. Click "Run pipeline"
+8. Wait for the AI and Py jobs to finish. When they're done (and successful), click on the Py job, and on the right middle of the screen
+click Download on the Job artifacts. This will be a zip with the decensored images. 
+9. Any errors will be printed out in the AI or Py jobs. You can use these error messages to figure out what's wrong.
+10. Repeat from step 1 (on your own fork, always) for a different comic if you want.
 
-# Manual Instructions (Downloading and running on your computer)
+# Manual Instructions (Downloading and running on your computer, prone to errors and troubleshooting)
 If you're not familiar with programming, going through the process of doing everything manually might be challenging, but also 
 didactic. Googling error messages will be your best bet.
 
@@ -69,19 +69,19 @@ as they require Python familiarity, aren't actively supported by their creators,
 What I've done is assembled the best versions of AI and DCP, ironed out the packages and abstracted away all the complexity into a Gitlab CI pipeline. You provide the URL,
 and the pipeline spits out the decensored pictures after 15-30 minutes. 
 
-AI and Py are amazing work that I cannot take for credit for. However, as I said, using them before was clunky, and the code
+AI and DCP are amazing work that I cannot take for credit for. However, as I said, using them before was clunky, and the code
 for both was very messy as they invented their own individual front-end GUIs to operate their algorithms. My work involved
 getting rid of all the messy front-ends, revealing only the logic underneath. I also wanted to skip the step where you had to manually
-download all the pictures yourself and convert them to pngs, so I wrote custom code to do both.
+download all the pictures yourself and convert them to pngs and remove screentones, so I wrote custom code to do everything automatically.
 
 I take credit for thinking of using Gitlab CI to do this. Doing so has the advantage that
-I can use Python Docker images (image: python:3.5) and requirements files to make these normally finicky tools far more reliable.
-You could copy this repo and change pretty much nothing, and it would work on another Gitlab repo, whereas the same can't be same for the source code.
+I can use Python Docker images (image: python:3.5) and requirements files to make these normally finicky dependencies far more reliable.
+You could copy this repo and change pretty much nothing, and it would work on another GitLab repo, whereas the same can't be same for the source code.
 
 # Limitations
 The free tier of Gitlab CI only allows 400 pipeline minutes per month. 
-The decensorring is not perfect, it'll sometimes miss bars and mosaic decensorring is not always good. However, running a censored
-comic through this pipeline improves it significantly.
+The decensoring is not perfect, it'll sometimes miss bars and mosaic decensoring is not always good. However, running a censored
+comic through this pipeline improves it significantly, and essentially for free.
 
 
 # Development
@@ -98,4 +98,7 @@ Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could c
 
 
 One feature that would be helpful is if both AI and Py could be run on the same Python version. This would simplify the pipeline configuration,
-and would also make straight up running the code easier. 
+and would also make straight up running the code easier. It's unlikely to be possible because of the machine learning versions though.
+
+# Troubleshooting
+If you see an error message like "bin/bash killed ###", the runner probably ran out of RAM. If it's a shared runner, not much can be done about that.
