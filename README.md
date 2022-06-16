@@ -26,11 +26,12 @@ Mosaics:
 [Imgur album](https://imgur.com/a/D1EQYkE), probably the easiest way to learn how to use the pipeline: [https://imgur.com/a/D1EQYkE](https://imgur.com/a/D1EQYkE). Read below for more details.
 
 Pipeline jobs are run on "runners", essentially cloud-hosted computers. Every person is entitled to 400 minutes of runner usage per month on GitLab's "shared runners". As such, you should fork (copy) this repo and run your own
-pipelines on your fork, using your own shared runner minutes. Another option is to [host your own runner](https://docs.gitlab.com/runner/), which involves complicated Docker setup, but allows you to run as many pipelines as you want.
+pipelines on your fork, using your own shared runner minutes. Another option is to [host your own runner](https://docs.gitlab.com/runner/), which involves complicated Docker setup, but allows you to run as many pipelines as you want. If you 
+have a strong computer setup, this can also decrease the total processing time, so it might be something worth looking into. 
 
-With that out of the way:
+As long as you have some runner available: 
 
-1. Make a GitLab account and [fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. 
+1. Make a GitLab account and [fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. You'll probably have to verify with a credit card, GitLab does this to discourage crypto-mining.
 2. On the GitLab repo sidebar of your fork, click CI/CD->Pipelines. 
 3. Click "Run pipeline" in the top right. You'll then see a screen that allows you to enter variables to mold the pipeline's functionality in a key:value fashion.
 4. Put `LINKORID` as a key (left text field) and the nhentai link, imgur link, or nhentai id of the comic as the value (right text field). You can check the Imgur album above if you're unsure.
