@@ -169,10 +169,3 @@ if __name__ == "__main__":
         mosaic_detect(PY_folder, input_images_folder)
 
     print("Finished Part 1!")
-
-# venv 2 is py 3.6
-# venv 4 is py 3.5
-# .\venv4\Scripts\activate
-# .\venv4\Scripts\python.exe .\AI\main.py
-# .\venv2\Scripts\activate
-# .\venv2\Scripts\python.exe .\Py\decensor.py

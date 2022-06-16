@@ -104,4 +104,11 @@ and would also make straight up running the code easier. It's unlikely to be pos
 - Getting the pictures to be in the top level of the artifacts instead of 2 folders in (Py/decensor_output/*.png currently).
 - Migrating to Github for Github actions
 # Troubleshooting
-If you see an error message like "bin/bash killed ###", the runner probably ran out of RAM. If it's a shared runner, not much can be done about that.
+If you see an error message like "bin/bash killed ###", the runner probably ran out of RAM. If it's a shared runner, not much can be done about that. 
+Maybe there's a certain number of pages after which ram runs out?
+
+# Notes
+This project isn't technically CI related because it's not like anyone is pushing code that has to be continuously integrated,
+but I just associate CI with pipelines and the name had a nice ring to it.
+
+Reddit Post: https://www.reddit.com/r/programming/comments/vaqzst/doujinci_automated_pipeline_for_decensoring
