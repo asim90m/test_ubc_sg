@@ -147,7 +147,9 @@ if __name__ == "__main__":
         ndownloader.download(input_images_folder, id)
     else:
         # FILE
-        shutil.copy2(link, input_images_folder)
+        for filename in os.listdir(link):
+            fp = os.path.join(link, filename)
+            shutil.copy2(fp, input_images_folder)
 
 
     if stremove.lower() == "true":
