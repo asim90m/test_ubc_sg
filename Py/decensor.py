@@ -283,7 +283,7 @@ class Decensor(QtCore.QThread):
             # save the decensored image
             base_name, ext = os.path.splitext(file_name)
             file_name = base_name + ext
-            for outf in ['\decensored', self.decensor_output_path]:
+            for outf in ['/decensored', self.decensor_output_path]:
                 save_path = os.path.join(outf, file_name)
                 output_img.save(save_path)
             print("Decensored image saved to {save_path}!".format(save_path=save_path))

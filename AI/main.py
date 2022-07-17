@@ -40,9 +40,10 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
     detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=False,
                                   is_mosaic=is_mosaic, dilation=dilation)
 
-    for f in os.listdir(output_dir):
-        fp = os.path.join(output_dir, f)
-        shutil.copy2(fp, "\detected")
+    for root, dirs, files in os.walk(output_dir):
+        for name in files:
+            fp = os.path.join(root, f)
+            shutil.copy2(fp, "/detected")
 
     # Announce completion, TODO: offer to run DCP from DCP directory
     detect_instance.unload_model()
