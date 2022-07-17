@@ -3,9 +3,9 @@ stages:
   - Py
 
 variables:
-  LINKORID: "https://nhentai.net/g/238404/"
-  BARORMOSAIC: "bar"
-  STREMOVE: "true"
+  LINKORID: "input"
+  BARORMOSAIC: "mosaid"
+  STREMOVE: "false"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   PYTHONUNBUFFERED: "1"
 
