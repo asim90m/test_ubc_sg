@@ -20,6 +20,10 @@ variables:
       - venv
       - $PIP_CACHE_DIR
 
+Local:
+  script:
+    - ls input
+
 AI:
   variables:
     GRPC_PYTHON_BUILD_SYSTEM_ZLIB: "true"
@@ -42,8 +46,6 @@ AI:
       - Py/decensor_input_original/*.png
 
 Py:
-  tags:
-    - gitlab-org # for more ram, otherwise crashes
   stage: Py
   image: python:3.6
   extends: ".cache_python"
