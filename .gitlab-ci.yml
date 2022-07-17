@@ -1,5 +1,5 @@
 stages:
-  - Local
+  - CHECK
   - AI
   - Py
 
@@ -21,7 +21,8 @@ variables:
       - venv
       - $PIP_CACHE_DIR
 
-Local:
+CHECK:
+  stage: CHECK
   script:
     - ls input
 
