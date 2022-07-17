@@ -283,8 +283,9 @@ class Decensor(QtCore.QThread):
             # save the decensored image
             base_name, ext = os.path.splitext(file_name)
             file_name = base_name + ext
-            save_path = os.path.join(self.decensor_output_path, file_name)
-            output_img.save(save_path)
+            for outf in ['/decensored', self.decensor_output_path]:
+                save_path = os.path.join(outf, file_name)
+                output_img.save(save_path)
             print("Decensored image saved to {save_path}!".format(save_path=save_path))
         else:
             # Legacy Code piece ↓, used when DCPv1 had ui with Painting

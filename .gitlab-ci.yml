@@ -3,9 +3,9 @@ stages:
   - Py
 
 variables:
-  LINKORID: "https://nhentai.net/g/238404/"
-  BARORMOSAIC: "bar"
-  STREMOVE: "true"
+  LINKORID: "/input"
+  BARORMOSAIC: "mosaic"
+  STREMOVE: "false"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   PYTHONUNBUFFERED: "1"
 
@@ -27,13 +27,18 @@ AI:
   image: python:3.5
   extends: ".cache_python"
   script:
+    - ls /input
     - python --version  # Print out python version for debugging
     - pip install --upgrade pip
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
     - apt-get update && apt-get install -y libgl1
-    - pip install -r AI/requirements-cpu.txt
+    - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    - curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+    - curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list
+    - apt-get update && apt-get install -y nvidia-container-toolkit
+    - pip install -r AI/requirements-gpu.txt
     - python AI/main.py $LINKORID $BARORMOSAIC $STREMOVE
   artifacts:
     expire_in: 1 week
@@ -42,8 +47,6 @@ AI:
       - Py/decensor_input_original/*.png
 
 Py:
-  tags:
-    - gitlab-org # for more ram, otherwise crashes
   stage: Py
   image: python:3.6
   extends: ".cache_python"
@@ -53,7 +56,11 @@ Py:
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
-    - pip install -r Py/requirements-cpu.txt
+    - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    - curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+    - curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list
+    - apt-get update && apt-get install -y nvidia-container-toolkit
+    - pip install -r Py/requirements-gpu.txt
     - python Py/decensor.py
   artifacts:
     expire_in: 1 week

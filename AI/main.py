@@ -40,6 +40,11 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
     detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=False,
                                   is_mosaic=is_mosaic, dilation=dilation)
 
+    for root, _, files in os.walk(output_dir):
+        for name in files:
+            fp = os.path.join(root, name)
+            shutil.copy2(fp, "/detected")
+
     # Announce completion, TODO: offer to run DCP from DCP directory
     detect_instance.unload_model()
     print('Process complete!')
@@ -122,23 +127,35 @@ if __name__ == "__main__":
     link, barormosaic, stremove = args.link, args.barormosaic, args.stremove
     if barormosaic.lower() not in ["bar", "mosaic"]:
         raise Exception("Specify BARORMOSAIC as bar or mosaic in the pipeline variables please")
-    imgur = False
+
+    mode = "FILE"
     if "imgur" in link.lower():
         assert "/a/" in link.lower(), "Error: not an album link ('/a/' missing)"
         print("Running with args barormosaic:" + barormosaic + " imgur link:" + link + " screentoneremove:" + stremove)
-        imgur = True
-    else:
+        mode = "IMGUR"
+    elif "nhentai" in link.lower():
         id = re.search('[0-9]+', link).group(0)
         if len(id) != 6:
             raise Exception("Invalid nhentai link/ID")
         print("Running with args barormosaic:" + barormosaic + " id:" + id + " screentoneremove:" + stremove)
+        mode = "NHENTAI"
+    else:
+        # file
+        print("Running with file mode: ", link)
+
 
     print("Step 1: Downloading images")
     wipedir(input_images_folder)
-    if imgur:
+    if mode == "IMGUR":
         imgurdownloader.download(input_images_folder, link)
-    else:
+    elif mode == "NHENTAI":
         ndownloader.download(input_images_folder, id)
+    else:
+        # FILE
+        for filename in os.listdir(link):
+            fp = os.path.join(link, filename)
+            shutil.copy2(fp, input_images_folder)
+
 
     if stremove.lower() == "true":
         print("Step 2: Removing screentones")
@@ -152,20 +169,25 @@ if __name__ == "__main__":
 
     print("Step 3: Converting to png")
 
-    # convert jpgs to png
+    # to png
+    converted = []
     for filename in os.listdir(infolder):
-        if "jpg" in filename:
+        basename, ext = os.path.splitext(filename)
+        if ".png" != ext:
+            fp = os.path.join(infolder, filename)
+            converted.append(fp)
             im1 = Image.open(infolder + filename)
-            im1.save(input_images_folder + filename.strip('jpg') + "png")
-    # delete jpgs
-    for filename in os.listdir(input_images_folder):
-        if "jpg" in filename:
-            os.remove(input_images_folder + filename)
+            im1.save(input_images_folder + basename + ".png")
+    # delete non-png
+    for fp in converted:
+        os.remove(fp)
 
     print("Step 4: Running AI")
     if barormosaic.lower() == 'bar':
         bar_detect(PY_folder, input_images_folder)
     elif barormosaic.lower() == 'mosaic':
         mosaic_detect(PY_folder, input_images_folder)
+
+
 
     print("Finished Part 1!")
