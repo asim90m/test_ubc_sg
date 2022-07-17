@@ -1,11 +1,10 @@
 stages:
-  - CHECK
   - AI
   - Py
 
 variables:
-  LINKORID: "input"
-  BARORMOSAIC: "mosaid"
+  LINKORID: "/input"
+  BARORMOSAIC: "mosaic"
   STREMOVE: "false"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   PYTHONUNBUFFERED: "1"
@@ -21,11 +20,6 @@ variables:
       - venv
       - $PIP_CACHE_DIR
 
-CHECK:
-  stage: CHECK
-  script:
-    - ls input
-
 AI:
   variables:
     GRPC_PYTHON_BUILD_SYSTEM_ZLIB: "true"
@@ -33,6 +27,7 @@ AI:
   image: python:3.5
   extends: ".cache_python"
   script:
+    - ls /input
     - python --version  # Print out python version for debugging
     - pip install --upgrade pip
     - pip install virtualenv
