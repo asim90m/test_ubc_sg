@@ -34,7 +34,11 @@ AI:
     - virtualenv venv
     - source venv/bin/activate
     - apt-get update && apt-get install -y libgl1
-    - pip install -r AI/requirements-cpu.txt
+    - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    - curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+    - curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+    - sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+    - pip install -r AI/requirements-gpu.txt
     - python AI/main.py $LINKORID $BARORMOSAIC $STREMOVE
   artifacts:
     expire_in: 1 week
@@ -52,7 +56,11 @@ Py:
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
-    - pip install -r Py/requirements-cpu.txt
+    - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    - curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+    - curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+    - sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+    - pip install -r Py/requirements-gpu.txt
     - python Py/decensor.py
   artifacts:
     expire_in: 1 week
