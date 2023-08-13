@@ -14,13 +14,14 @@ def rreplace(s, old, new, occurrence):
 
 
 def download(download_folder, id):
-    url = "https://nhentai.xxx/g/" + str(id) # net has cloudflare
+    url = "https://nhentai.xxx/g/" + str(id)  # net has cloudflare
     try:
         response = requests.request('get', url)
         if response.status_code in (200,):
             response = response.content
         else:
-            raise Exception("Response not 200 from server")
+            raise Exception("Response not 200 from server. Note that this app uses nhentai.xxx instead of nhentai.net,"
+                            "because nhentai.net has cloudflare protection. Check if nhentai.xxx/g/{} exists.".format(id))
     except Exception as e:
         raise e
     html = BeautifulSoup(response, 'html.parser')

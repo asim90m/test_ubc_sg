@@ -3,6 +3,7 @@ stages:
   - Py
 
 variables:
+  # defaults for pipeline to run test
   LINKORID: "https://nhentai.net/g/238404/"
   BARORMOSAIC: "bar"
   STREMOVE: "true"
