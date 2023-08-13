@@ -129,8 +129,6 @@ if __name__ == "__main__":
         imgur = True
     else:
         id = re.search('[0-9]+', link).group(0)
-        if len(id) != 6:
-            raise Exception("Invalid nhentai link/ID")
         print("Running with args barormosaic:" + barormosaic + " id:" + id + " screentoneremove:" + stremove)
 
     print("Step 1: Downloading images")
