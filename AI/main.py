@@ -9,7 +9,9 @@ import re
 from PIL import Image
 
 
-def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jpg=False, dilation=0):
+def hentAI_detection(
+    dcp_dir, in_path, is_mosaic=False, is_video=False, force_jpg=False, dilation=0
+):
     # TODO: Create new window? Can show loading bar
     # hent_win = new_window()
     # info_label = Label(hent_win, text="Beginning detection")
@@ -19,30 +21,45 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
     dilation = (dilation) * 2  # Dilation performed via kernel, so dimension is doubled
 
     # Copy input input_images_folder to decensor_input_original. NAMES MUST MATCH for DCP
-    print('copying inputs into input_original dcp input_images_folder')
+    print("copying inputs into input_original dcp input_images_folder")
     # always do this, even for bar, so that copying to the decensor_output for pics that have no bars is easier
     for fil in listdir(in_path):
-        if fil.endswith('jpg') or fil.endswith('png') or fil.endswith('jpeg') or fil.endswith(
-                'JPG') or fil.endswith('PNG') or fil.endswith('JPEG'):
+        if (
+            fil.endswith("jpg")
+            or fil.endswith("png")
+            or fil.endswith("jpeg")
+            or fil.endswith("JPG")
+            or fil.endswith("PNG")
+            or fil.endswith("JPEG")
+        ):
             try:
                 path1 = os.path.join(in_path, fil)
                 path2 = os.path.join(dcp_dir, "decensor_input_original", fil)
                 shutil.copy(path1, path2)  # DCP is compatible with original jpg input.
             except Exception as e:
-                print("ERROR in hentAI_detection: Mosaic copy to decensor_input_original failed!", fil, e)
+                print(
+                    "ERROR in hentAI_detection: Mosaic copy to decensor_input_original failed!",
+                    fil,
+                    e,
+                )
                 return
 
     # Run detection
     output_dir = os.path.join(dcp_dir, "decensor_input", "")
     assert os.path.exists(output_dir)
 
-    print('Running detection, outputting to {}'.format(output_dir))
-    detect_instance.run_on_folder(input_folder=in_path, output_folder=output_dir, is_video=False,
-                                  is_mosaic=is_mosaic, dilation=dilation)
+    print("Running detection, outputting to {}".format(output_dir))
+    detect_instance.run_on_folder(
+        input_folder=in_path,
+        output_folder=output_dir,
+        is_video=False,
+        is_mosaic=is_mosaic,
+        dilation=dilation,
+    )
 
     # Announce completion, TODO: offer to run DCP from DCP directory
     detect_instance.unload_model()
-    print('Process complete!')
+    print("Process complete!")
 
 
 # helper function to call TGAN input_images_folder function.
@@ -70,11 +87,15 @@ def hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jp
 
 
 def bar_detect(dcp_dir, in_path):
-    hentAI_detection(dcp_dir, in_path, is_mosaic=False, is_video=False, force_jpg=True, dilation=4)
+    hentAI_detection(
+        dcp_dir, in_path, is_mosaic=False, is_video=False, force_jpg=True, dilation=4
+    )
 
 
 def mosaic_detect(dcp_dir, in_path):
-    hentAI_detection(dcp_dir, in_path, is_mosaic=True, is_video=False, dilation=4, force_jpg=True)
+    hentAI_detection(
+        dcp_dir, in_path, is_mosaic=True, is_video=False, dilation=4, force_jpg=True
+    )
 
 
 def wipedir(dir):
@@ -91,12 +112,12 @@ if __name__ == "__main__":
     3. Convert jpgs to pngs
     4. Run AI
     5. Run decensor (other script, Python 3.6 instead of 3.5)
-    
+
     """
 
     # setup folders and stuff
-    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # hide 10% of memory allocated warnings
-    weights_path = os.path.join(os.getcwd(), 'weights.h5')
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # hide 10% of memory allocated warnings
+    weights_path = os.path.join(os.getcwd(), "weights.h5")
     AI_folder = os.path.join(os.getcwd(), "AI", "")
     PY_folder = os.path.join(os.getcwd(), "Py", "")
     input_images_folder = os.path.join(AI_folder, "input_images", "")
@@ -114,22 +135,38 @@ if __name__ == "__main__":
     current_window = None
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('link')
-    parser.add_argument('barormosaic')  # bar or mosaic censorship
-    parser.add_argument('stremove')  # remove screen tones or don't
+    parser.add_argument("link")
+    parser.add_argument("barormosaic")  # bar or mosaic censorship
+    parser.add_argument("stremove")  # remove screen tones or don't
     args = parser.parse_args()
 
     link, barormosaic, stremove = args.link, args.barormosaic, args.stremove
     if barormosaic.lower() not in ["bar", "mosaic"]:
-        raise Exception("Specify BARORMOSAIC as bar or mosaic in the pipeline variables please")
+        raise Exception(
+            "Specify BARORMOSAIC as bar or mosaic in the pipeline variables please"
+        )
     imgur = False
     if "imgur" in link.lower():
         assert "/a/" in link.lower(), "Error: not an album link ('/a/' missing)"
-        print("Running with args barormosaic:" + barormosaic + " imgur link:" + link + " screentoneremove:" + stremove)
+        print(
+            "Running with args barormosaic:"
+            + barormosaic
+            + " imgur link:"
+            + link
+            + " screentoneremove:"
+            + stremove
+        )
         imgur = True
     else:
-        id = re.search('[0-9]+', link).group(0)
-        print("Running with args barormosaic:" + barormosaic + " id:" + id + " screentoneremove:" + stremove)
+        id = re.search("[0-9]+", link).group(0)
+        print(
+            "Running with args barormosaic:"
+            + barormosaic
+            + " id:"
+            + id
+            + " screentoneremove:"
+            + stremove
+        )
 
     print("Step 1: Downloading images")
     wipedir(input_images_folder)
@@ -154,16 +191,16 @@ if __name__ == "__main__":
     for filename in os.listdir(infolder):
         if "jpg" in filename:
             im1 = Image.open(infolder + filename)
-            im1.save(input_images_folder + filename.strip('jpg') + "png")
+            im1.save(input_images_folder + filename.strip("jpg") + "png")
     # delete jpgs
     for filename in os.listdir(input_images_folder):
         if "jpg" in filename:
             os.remove(input_images_folder + filename)
 
     print("Step 4: Running AI")
-    if barormosaic.lower() == 'bar':
+    if barormosaic.lower() == "bar":
         bar_detect(PY_folder, input_images_folder)
-    elif barormosaic.lower() == 'mosaic':
+    elif barormosaic.lower() == "mosaic":
         mosaic_detect(PY_folder, input_images_folder)
 
     print("Finished Part 1!")

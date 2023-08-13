@@ -5,7 +5,9 @@ import os
 def download(download_folder, imgur_link):
     # can't use f strings in Python 3.5
     print("Trying to download from {} to {}".format(imgur_link, download_folder))
-    cmd = "gallery-dl -d {} -o 'filename={{num}}.{{ext}}' -o 'directory=' {}".format(download_folder, imgur_link)
+    cmd = "gallery-dl -d {} -o 'filename={{num}}.{{ext}}' -o 'directory=' {}".format(
+        download_folder, imgur_link
+    )
     os.system(cmd)
 
 

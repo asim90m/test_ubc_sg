@@ -1,8 +1,8 @@
 from PySide2 import QtCore
 
+
 # Signals used for sharing status between threads(IPC, InterProcess Connection)
 class Signals(QtCore.QObject):
-
     # usage example in other class(thread) :
     # → self.signals.<method_name>.emit(<parameters - type strict>)
 
