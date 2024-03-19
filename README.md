@@ -34,7 +34,7 @@ As long as you have some runner available:
 1. Make a GitLab account and [fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html) this repo so that you're using your own minutes instead of mine. You'll probably have to verify with a credit card, GitLab does this to discourage crypto-mining.
 2. On the GitLab repo sidebar of your fork, click CI/CD->Pipelines. 
 3. Click "Run pipeline" in the top right. You'll then see a screen that allows you to enter variables to mold the pipeline's functionality in a key:value fashion.
-4. Put `LINKORID` as a key (left text field) and the nhentai link, imgur link, or nhentai id of the comic as the value (right text field). You can check the Imgur album above if you're unsure.
+4. Put `LINKORID` as a key (left text field) and the nhentai link or nhentai id of the comic as the value (right text field). Note that this app uses **nhentai.xxx IDs, not nhentai.net IDs** (because of Cloudflare blocking bots on .net). Usually, they are the same, but not always. Sometimes, a new upload to .net will not be available yet on .xxx, or it will have a different ID, so you will have to figure that out.
 5. The pipeline defaults to bar censorship, if yours has mosaics, put `BARORMOSAIC` as a key and `mosaic` as the value.
 6. The pipeline defaults to averaging out pictures to remove [screentones](https://en.wikipedia.org/wiki/Screentone). If you are sure that your comic
 doesn't have screentones, you can set `STREMOVE` to `false`. If you set it to false and screentones are actually in your comic, then the output will be bad and time will be wasted.
