@@ -1,6 +1,6 @@
 # DoujinCI
 
-DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a nhentai link, nhentai 6-digit id, or Imgur album link to the pipeline, and it will spit out decensored images in the artifacts of the pipeline job.
+DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a nhentai link or nhentai.xxx 6-digit id, and it will spit out decensored images in the artifacts of the pipeline job.
 
 DoujinCI builds off of natethegreate's [HentAI](https://github.com/natethegreate/hent-AI) and deeppomf's [DeepCreamPy](https://portrait.gitee.com/1436159772/DeepCreamPy/tree/master), but adds in the convenience of
 downloading the doujin automatically, converting the .jpgs to .pngs, removing screentones, and downloading all the right dependencies for HentAI and DeepCreamPy,
@@ -100,7 +100,6 @@ Nhentai.to, the first mirror I tried, had rate limiting, and Nhentai.xxx could c
 ### Future features that I won't work on but you could:
 - Making both both AI and Py run on the same Python version. This would simplify the pipeline configuration,
 and would also make straight up running the code easier. It's unlikely to be possible because of the machine learning versions though.
-- Uploading to Imgur for the output
 - Trying [DeepMosaics](https://github.com/HypoX64/DeepMosaics) instead of DeepCreamyPy
 - Getting the pictures to be in the top level of the artifacts instead of 2 folders in (Py/decensor_output/*.png currently).
 - Migrating to Github for Github actions
