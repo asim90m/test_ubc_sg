@@ -31,10 +31,13 @@ def download(download_folder, id):
     html = BeautifulSoup(response, "html.parser")
     info = html.find("div", attrs={"id": "info"})
     if info is None:
-        raise Exception(f"This error probably indicates that nhentai.xxx/g/{id} does not exist. DoujinCI"
-                        f"uses nhentai.xxx instead of nhentai.net because .net has cloudflare bot protection"
-                        f"which is really tricky to get around. Your best bet is to wait until .xxx has this id,"
-                        f"or download and run everything manually (hard).")
+        raise Exception(
+            f"This error probably indicates that nhentai.xxx/g/{id} does not exist. DoujinCI"
+            f"uses nhentai.xxx instead of nhentai.net because .net has cloudflare bot protection"
+            f"which is really tricky to get around. You can try searching nhentai.xxx for the title"
+            f"to see if it has been uploaded under a different ID, upload it to nhentai.xxx yourself, or"
+            f"wait for someone else to upload it. You can also run this repository manually, which is hard."
+        )
     title = info.find("h1").text
     # cover = html.find('div', attrs={'id': 'cover'})
     # img_id = re.search('/galleries/([0-9]+)/cover.(jpg|png|gif)$', cover.a.img.attrs['src'])
