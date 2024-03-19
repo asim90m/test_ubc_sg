@@ -1,5 +1,6 @@
 # DoujinCI
 
+# NOTE: this project is using nhentai.xxx IDs, not nhentai.net. The latter blocks automatic downloads unfortunately.
 DoujinCI is an automated pipeline to decensor doujins with bars or mosaics. Provide a nhentai link or nhentai.xxx 6-digit id, and it will spit out decensored images in the artifacts of the pipeline job.
 
 DoujinCI builds off of natethegreate's [HentAI](https://github.com/natethegreate/hent-AI) and deeppomf's [DeepCreamPy](https://portrait.gitee.com/1436159772/DeepCreamPy/tree/master), but adds in the convenience of

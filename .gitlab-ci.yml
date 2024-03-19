@@ -4,7 +4,7 @@ stages:
 
 variables:
   # defaults for pipeline to run test
-  LINKORID: "https://nhentai.net/g/238404/"
+  LINKORID: "https://nhentai.xxx/g/238602/"
   BARORMOSAIC: "bar"
   STREMOVE: "true"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
