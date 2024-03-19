@@ -1,8 +1,11 @@
 # import the necessary packages
 import cv2
+
+
 class ShapeDetector:
     def __init__(self):
         pass
+
     def detect(self, c):
         # initialize the shape name and approximate the contour
         shape = "unidentified"

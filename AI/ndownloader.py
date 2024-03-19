@@ -32,11 +32,13 @@ def download(download_folder, id):
     info = html.find("div", attrs={"id": "info"})
     if info is None:
         raise Exception(
-            f"This error probably indicates that nhentai.xxx/g/{id} does not exist. DoujinCI"
-            f"uses nhentai.xxx instead of nhentai.net because .net has cloudflare bot protection"
-            f"which is really tricky to get around. You can try searching nhentai.xxx for the title"
-            f"to see if it has been uploaded under a different ID, upload it to nhentai.xxx yourself, or"
-            f"wait for someone else to upload it. You can also run this repository manually, which is hard."
+            "This error probably indicates that nhentai.xxx/g/{} does not exist. DoujinCI"
+            "uses nhentai.xxx instead of nhentai.net because .net has cloudflare bot protection"
+            "which is really tricky to get around. You can try searching nhentai.xxx for the title"
+            "to see if it has been uploaded under a different ID, upload it to nhentai.xxx yourself, or"
+            "wait for someone else to upload it. You can also run this repository manually, which is hard.".format(
+                id
+            )
         )
     title = info.find("h1").text
     # cover = html.find('div', attrs={'id': 'cover'})

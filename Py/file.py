@@ -31,12 +31,16 @@ def check_file(input_dir, output_dir, release_version=True):
         # seperated detecting same file names and deleting file name list
         # just in case of index_error and show list of files which will not go though
         # decensor process
-        print("\n＃＃＃ These files will not be decensored for following reason  ＃＃＃\n")
+        print(
+            "\n＃＃＃ These files will not be decensored for following reason  ＃＃＃\n"
+        )
 
         error_messages(file_list, files_removed)
         input("\nPress anything to continue...")
 
-        print("\n＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃\n")
+        print(
+            "\n＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃\n"
+        )
 
     return file_list, files_removed
 
